@@ -1,0 +1,50 @@
+{
+  "name": "course-hub-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "start": "node ./dist/src/server.js",
+    "start:dev": "dotenv -e .env.development -- ts-node-dev --poll --respawn --transpile-only --no-notify -r tsconfig-paths/register src/server.ts",
+    "seed:dev": "dotenv -e .env.development -- ts-node-dev --poll --respawn --transpile-only --no-notify -r tsconfig-paths/register ./src/infra/seeders/index.ts",
+    "migrate:dev": "dotenv -e .env.development prisma migrate dev",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.20.0",
+    "@types/cors": "^2.8.17",
+    "@types/dotenv": "^8.2.3",
+    "@types/express": "^5.0.0",
+    "@types/joi": "^17.2.3",
+    "@types/node": "^22.13.4",
+    "@types/swagger-ui-express": "^4.1.7",
+    "dotenv-cli": "^8.0.0",
+    "eslint": "^9.20.1",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "globals": "^15.15.0",
+    "prettier": "^3.5.1",
+    "prisma": "^6.3.1",
+    "ts-node-dev": "^2.0.0",
+    "tsc-alias": "^1.8.10",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.24.1"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.3.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "http-status-codes": "^2.3.0",
+    "joi": "^17.13.3",
+    "pino": "^9.6.0",
+    "pino-pretty": "^13.0.0",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
