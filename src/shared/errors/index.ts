@@ -4,3 +4,4 @@ export { InternalServerError } from "./InternalServerError";
 export { NotFoundError } from "./NotFoundError";
 export { ForbiddenError } from "./ForbiddenError";
 export { UnauthorizedError } from "./UnauthorizedError";
+export { ConflictError } from "./ConflictError";
