@@ -9,3 +9,25 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique //@db.VarChar(14)
+  createdAt DateTime @default(now())
+
+  followers Follow[] @relation("followers")
+  following Follow[] @relation("following")
+}
+
+model Follow {
+  id         Int @id @default(autoincrement())
+  followerId Int
+  followedId Int
+
+  follower User @relation("followers", fields: [followerId], references: [id], onDelete: Cascade)
+  followed User @relation("following", fields: [followedId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([followerId, followedId])
+}
