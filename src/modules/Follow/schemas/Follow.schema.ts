@@ -5,4 +5,9 @@ const follow = Joi.object({
   followedId: Joi.number().required(),
 });
 
-export = { follow };
+const unfollow = Joi.object({
+  followerId: Joi.number().required(),
+  followedId: Joi.number().required(),
+});
+
+export = { follow, unfollow };

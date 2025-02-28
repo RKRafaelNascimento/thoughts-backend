@@ -20,4 +20,10 @@ export class FollowRepository implements IFollowRepository {
       where: { followerId_followedId: { followedId, followerId } },
     });
   }
+
+  async unfollow(followerId: number, followedId: number): Promise<void> {
+    await this.ormClient.follow.delete({
+      where: { followerId_followedId: { followerId, followedId } },
+    });
+  }
 }

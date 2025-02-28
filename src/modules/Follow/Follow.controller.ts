@@ -37,4 +37,31 @@ export class FollowControler implements IFollowController {
       res.status(response.statusCode).json(response);
     }
   }
+
+  async unfollow(req: Request, res: Response): Promise<void> {
+    try {
+      const followedId = Number(req.params.followedId);
+      const followerId = Number(req.headers["follower_id"]);
+
+      const { value, error } = this.validatorService.validate<{
+        followerId: number;
+        followedId: number;
+      }>(FollowSchema.unfollow, { followedId, followerId });
+
+      if (error) {
+        throw new BadRequestError(
+          "Missing or invalid params",
+          FollowErrorCode.MISSING_OR_INVALID_PARAMS,
+          this.validatorService.formatErrorMessage(error),
+        );
+      }
+
+      await this.followService.unfollow(value.followerId, value.followedId);
+
+      res.status(StatusCodes.NO_CONTENT).send();
+    } catch (error) {
+      const response = HttpHelpers.handleError(error);
+      res.status(response.statusCode).json(response);
+    }
+  }
 }

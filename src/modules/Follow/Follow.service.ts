@@ -55,4 +55,53 @@ export class FollowService implements IFollowService {
 
     return !!isFollowing;
   }
+
+  async unfollow(followerId: number, followedId: number): Promise<void> {
+    const { isFollowing } = await this.validateFollowAction(
+      followerId,
+      followedId,
+    );
+
+    if (!isFollowing) {
+      throw new ConflictError(
+        "You do not follow this user",
+        FollowErrorCode.YOU_NOT_FOLLOW_USER,
+      );
+    }
+
+    this.followRepository.unfollow(followerId, followedId);
+  }
+
+  async validateFollowAction(
+    followerId: number,
+    followedId: number,
+  ): Promise<{ isFollowing: boolean }> {
+    if (followerId === followedId) {
+      throw new BadRequestError(
+        "You cannot follow or unfollow yourself.",
+        FollowErrorCode.YOU_CANNOT_UNFOLLOW_OR_FOLLOW_YOURSELF,
+      );
+    }
+
+    const follower = await this.userService.getById(followerId);
+    if (!follower) {
+      throw new NotFoundError(
+        "Follower not found",
+        FollowErrorCode.FOLLOWER_NOT_FOUND,
+      );
+    }
+
+    const followed = await this.userService.getById(followedId);
+
+    if (!followed) {
+      throw new NotFoundError(
+        "Followed not found",
+        FollowErrorCode.FOLLOWED_NOT_FOUND,
+      );
+    }
+
+    const isFollowing = await this.isFollowing(followerId, followedId);
+
+    return { isFollowing };
+  }
 }
