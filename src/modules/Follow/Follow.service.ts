@@ -10,32 +10,10 @@ export class FollowService implements IFollowService {
   ) {}
 
   async follow(followerId: number, followedId: number): Promise<IFollow> {
-    if (followerId === followedId) {
-      throw new BadRequestError(
-        "You cannot follow yourself",
-        FollowErrorCode.YOU_CANNOT_FOLLOW_YOURSELF,
-      );
-    }
-
-    const follower = await this.userService.getById(followerId);
-
-    if (!follower) {
-      throw new NotFoundError(
-        "Follower not found",
-        FollowErrorCode.YOU_CANNOT_FOLLOW_YOURSELF,
-      );
-    }
-
-    const followed = await this.userService.getById(followedId);
-
-    if (!followed) {
-      throw new NotFoundError(
-        "Followed not found",
-        FollowErrorCode.FOLLOWED_NOT_FOUND,
-      );
-    }
-
-    const isFollowing = await this.isFollowing(followerId, followedId);
+    const { isFollowing } = await this.validateFollowAction(
+      followerId,
+      followedId,
+    );
 
     if (isFollowing) {
       throw new ConflictError(
