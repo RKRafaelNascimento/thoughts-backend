@@ -15,10 +15,13 @@ export class FollowControler implements IFollowController {
 
   async follow(req: Request, res: Response): Promise<void> {
     try {
+      const followedId = Number(req.params.followedId);
+      const followerId = Number(req.headers["follower_id"]);
+
       const { value, error } = this.validatorService.validate<{
         followerId: number;
         followedId: number;
-      }>(FollowSchema.follow, req.body);
+      }>(FollowSchema.follow, { followedId, followerId });
 
       if (error) {
         throw new BadRequestError(
@@ -28,9 +31,11 @@ export class FollowControler implements IFollowController {
         );
       }
 
-      const { followerId, followedId } = value;
+      const follow = await this.followService.follow(
+        value.followerId,
+        value.followedId,
+      );
 
-      const follow = await this.followService.follow(followerId, followedId);
       res.status(StatusCodes.CREATED).json(follow);
     } catch (error) {
       const response = HttpHelpers.handleError(error);
