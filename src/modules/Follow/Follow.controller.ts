@@ -16,7 +16,7 @@ export class FollowControler implements IFollowController {
   async follow(req: Request, res: Response): Promise<void> {
     try {
       const followedId = Number(req.params.followedId);
-      const followerId = Number(req.headers["follower_id"]);
+      const followerId = Number(req.userId);
 
       const { value, error } = this.validatorService.validate<{
         followerId: number;
@@ -46,7 +46,7 @@ export class FollowControler implements IFollowController {
   async unfollow(req: Request, res: Response): Promise<void> {
     try {
       const followedId = Number(req.params.followedId);
-      const followerId = Number(req.headers["follower_id"]);
+      const followerId = Number(req.userId);
 
       const { value, error } = this.validatorService.validate<{
         followerId: number;
