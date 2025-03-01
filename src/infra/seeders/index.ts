@@ -4,14 +4,47 @@ import { Logger } from "@/shared/logger";
 const logger = Logger.getInstance();
 const prisma = new PrismaClient();
 
+function generateContent(): string {
+  const words = [
+    "Lorem ipsum dolor sit amet",
+    "Consectetur adipiscing elit",
+    "Sed do eiusmod tempor incididunt",
+    "Ut labore et dolore magna aliqua",
+    "Quis nostrud exercitation ullamco",
+    "Laboris nisi ut aliquip ex ea commodo",
+    "Duis aute irure dolor in reprehenderit",
+    "Voluptate velit esse cillum dolore",
+    "Eu fugiat nulla pariatur",
+    "Excepteur sint occaecat cupidatat non proident",
+  ];
+
+  let content = "";
+  while (content.length < 200) {
+    const word = words[Math.floor(Math.random() * words.length)];
+    content += ` ${word}`;
+    if (content.length >= 200) {
+      return content.substring(0, 200);
+    }
+  }
+
+  return content;
+}
+
+function getSentiment(index: number): "pos" | "neg" | "neutral" {
+  const sentiments = ["pos", "neg", "neutral"];
+  return sentiments[index % sentiments.length] as "pos" | "neg" | "neutral";
+}
+
 async function main() {
   try {
     await prisma.$transaction(async (transaction) => {
       await transaction.follow.deleteMany({});
+      await transaction.post.deleteMany({});
       await transaction.user.deleteMany({});
 
       await transaction.$executeRaw`DELETE FROM sqlite_sequence WHERE name = 'User';`;
       await transaction.$executeRaw`DELETE FROM sqlite_sequence WHERE name = 'Follow';`;
+      await transaction.$executeRaw`DELETE FROM sqlite_sequence WHERE name = 'Post';`;
 
       await transaction.user.createMany({
         data: [
@@ -28,6 +61,7 @@ async function main() {
       const user1 = users[0];
       const user2 = users[1];
       const user3 = users[2];
+      const user4 = users[3];
 
       await transaction.follow.createMany({
         data: [
@@ -55,6 +89,21 @@ async function main() {
            * User 3 follow only user 1
            **/
           { followerId: user3.id, followedId: user1.id },
+        ],
+      });
+
+      await transaction.post.createMany({
+        data: [
+          ...Array.from({ length: 5 }).map((_, index) => ({
+            userId: user3.id,
+            content: generateContent(),
+            sentiment: getSentiment(index),
+          })),
+          ...Array.from({ length: 4 }).map((_, index) => ({
+            userId: user4.id,
+            content: generateContent(),
+            sentiment: getSentiment(index),
+          })),
         ],
       });
 
