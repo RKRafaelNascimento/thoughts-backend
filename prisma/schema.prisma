@@ -18,6 +18,7 @@ model User {
   followers Follow[] @relation("followers")
   following Follow[] @relation("following")
   Post      Post[]
+  Repost    Repost[]
 }
 
 model Follow {
@@ -40,6 +41,20 @@ model Post {
   content   String //@db.VarChar(200)
   sentiment Sentiment
   createdAt DateTime  @default(now())
+  Repost    Repost[]
+}
+
+model Repost {
+  id             Int        @id @default(autoincrement())
+  userId         Int
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  originalPostId Int
+  originalPost   Post       @relation(fields: [originalPostId], references: [id], onDelete: Cascade)
+  content        String? //@db.VarChar(200) 
+  sentiment      Sentiment?
+  createdAt      DateTime   @default(now())
+
+  @@unique([userId, originalPostId])
 }
 
 enum Sentiment {
