@@ -40,11 +40,13 @@ async function main() {
     await prisma.$transaction(async (transaction) => {
       await transaction.follow.deleteMany({});
       await transaction.post.deleteMany({});
+      await transaction.repost.deleteMany({});
       await transaction.user.deleteMany({});
 
       await transaction.$executeRaw`DELETE FROM sqlite_sequence WHERE name = 'User';`;
       await transaction.$executeRaw`DELETE FROM sqlite_sequence WHERE name = 'Follow';`;
       await transaction.$executeRaw`DELETE FROM sqlite_sequence WHERE name = 'Post';`;
+      await transaction.$executeRaw`DELETE FROM sqlite_sequence WHERE name = 'Repost';`;
 
       await transaction.user.createMany({
         data: [
