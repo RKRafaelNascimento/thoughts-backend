@@ -1,5 +1,8 @@
-import { IUser } from ".";
+import { IPostsAndReposts, IUser } from ".";
 
 export interface IUserRepository {
   getById(id: number): Promise<IUser | null>;
+  countLimitedPostsAndRepostsTodayByUser(
+    userId: number,
+  ): Promise<IPostsAndReposts[]>;
 }
