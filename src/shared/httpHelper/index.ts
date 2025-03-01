@@ -38,8 +38,13 @@ export class HttpHelpers {
       });
     }
 
+    logger.fatal({
+      msg: "Unexpected Error",
+      errorMessage: (error as Error).message,
+      errorStack: (error as Error).stack,
+    });
+
     const internalServerError = new InternalServerError();
-    logger.error({ msg: "Unexpected Error", error });
     return HttpHelpers.errorResponse({
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
       code: internalServerError.code,
