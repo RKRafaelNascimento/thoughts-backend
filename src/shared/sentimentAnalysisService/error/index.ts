@@ -1,0 +1,1 @@
+export { SentimentAnalysisError } from "./SentimentAnalysisError";
