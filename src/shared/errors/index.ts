@@ -5,3 +5,5 @@ export { NotFoundError } from "./NotFoundError";
 export { ForbiddenError } from "./ForbiddenError";
 export { UnauthorizedError } from "./UnauthorizedError";
 export { ConflictError } from "./ConflictError";
+export { ClientRequestError } from "./ClientRequestError";
+export { TooManyRequestsError } from "./TooManyRequestsError";
