@@ -1,5 +1,10 @@
 import { TooManyRequestsError } from "@/shared/errors";
-import { IPost, IPostRepository, IPostService } from "./interfaces";
+import {
+  IPost,
+  IPostAndReposts,
+  IPostRepository,
+  IPostService,
+} from "./interfaces";
 import { PostErrorCode } from "./error";
 import { MAX_DAILY_POSTS } from "@/config";
 import { ISentimentAnalysisService } from "@/shared/sentimentAnalysisService/interfaces";
@@ -33,5 +38,22 @@ export class PostService implements IPostService {
 
   async getById(id: number): Promise<IPost | null> {
     return this.postRepository.getById(id);
+  }
+
+  async getFeed(
+    skip: number,
+    take: number,
+    userId: number,
+    isFollowing?: boolean,
+  ): Promise<IPostAndReposts[]> {
+    if (isFollowing) {
+      return this.postRepository.getPostsAndRepostsFromFollowing(
+        userId,
+        skip,
+        take,
+      );
+    }
+
+    return this.postRepository.getAllPostsWithReposts(skip, take);
   }
 }

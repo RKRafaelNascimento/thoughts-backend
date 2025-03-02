@@ -12,4 +12,10 @@ route.post(
   postController.create.bind(postController),
 );
 
+route.get(
+  "/post/feed",
+  AuthMiddleware.authorizeUser,
+  postController.getFeed.bind(postController),
+);
+
 export default route;
