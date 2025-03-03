@@ -1,20 +1,30 @@
 version: "3.9"
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: course-hub-api
+  postgres:
+    image: postgres:15
+    container_name: thoughts-backend-postgres
     restart: always
     environment:
-      DATABASE_URL: "file:/app/prisma/dev.db"
-    volumes:
-      - sqlite_data:/app/prisma
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: thoughts
     ports:
-      - "3000:3000"
-    command: >
-      sh -c "npx prisma migrate deploy && npm start"
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: thoughts-backend-pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
 
 volumes:
-  sqlite_data:
+  postgres-data:
