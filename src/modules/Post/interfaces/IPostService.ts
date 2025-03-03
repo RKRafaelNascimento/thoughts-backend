@@ -10,4 +10,9 @@ export interface IPostService {
     userId?: number,
     isFollowing?: boolean,
   ): Promise<IPostAndReposts[]>;
+  getPostsByUserId(
+    skip: number,
+    take: number,
+    userId: number,
+  ): Promise<IPostAndReposts[]>;
 }

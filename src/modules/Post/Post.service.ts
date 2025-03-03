@@ -56,4 +56,12 @@ export class PostService implements IPostService {
 
     return this.postRepository.getAllPostsWithReposts(skip, take);
   }
+
+  async getPostsByUserId(
+    skip: number,
+    take: number,
+    userId: number,
+  ): Promise<IPostAndReposts[]> {
+    return this.postRepository.getPostsAndRepostByUserId(userId, skip, take);
+  }
 }

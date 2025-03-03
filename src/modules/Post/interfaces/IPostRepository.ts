@@ -12,4 +12,9 @@ export interface IPostRepository {
     skip: number,
     take: number,
   ): Promise<IPostAndReposts[]>;
+  getPostsAndRepostByUserId(
+    userId: number,
+    skip: number,
+    take: number,
+  ): Promise<IPostAndReposts[]>;
 }

@@ -89,4 +89,30 @@ export class PostRepository implements IPostRepository {
       take,
     }) as unknown as IPostAndReposts[];
   }
+
+  async getPostsAndRepostByUserId(
+    userId: number,
+    skip: number,
+    take: number,
+  ): Promise<IPostAndReposts[]> {
+    return this.ormClient.post.findMany({
+      where: {
+        OR: [{ userId: userId }],
+      },
+      include: {
+        user: true,
+        Repost: {
+          include: {
+            user: true,
+          },
+          take,
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip,
+      take,
+    }) as unknown as IPostAndReposts[];
+  }
 }

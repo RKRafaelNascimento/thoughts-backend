@@ -17,4 +17,16 @@ const getFeed = Joi.object({
   }),
 });
 
-export = { create, getFeed };
+const getPostByUseId = Joi.object({
+  page: Joi.number().integer().default(1).messages({
+    "number.base": '"page" must be a number.',
+    "number.min": '"page" must be at least {#limit}.',
+  }),
+  pageSize: Joi.number().integer().max(MAX_PAGE_SIZE).default(10).messages({
+    "number.base": '"pageSize" must be a number.',
+    "number.max": '"pageSize" cannot be greater than {#limit}.',
+  }),
+  userId: Joi.number().required(),
+});
+
+export = { create, getFeed, getPostByUseId };

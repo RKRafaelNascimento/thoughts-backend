@@ -18,4 +18,9 @@ route.get(
   postController.getFeed.bind(postController),
 );
 
+route.get(
+  "/post/:userId",
+  postController.getPostsByUserId.bind(postController),
+);
+
 export default route;
