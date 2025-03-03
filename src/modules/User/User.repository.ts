@@ -1,5 +1,10 @@
 import { IDatabaseClient } from "@/infra/interfaces";
-import { IPostsAndReposts, IUser, IUserRepository } from "./interfaces";
+import {
+  IPostsAndReposts,
+  IUser,
+  IUserRepository,
+  IUserWithCount,
+} from "./interfaces";
 import { PrismaClient } from "@prisma/client";
 import { DateHelper } from "@/shared/dateHelper";
 import { MAX_DAILY_POSTS } from "@/config";
@@ -42,6 +47,25 @@ export class UseRepository implements IUserRepository {
           },
           select: { id: true },
           take: MAX_DAILY_POSTS + 1,
+        },
+      },
+    });
+  }
+
+  async getUserProfile(userId: number): Promise<IUserWithCount | null> {
+    return this.ormClient.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        username: true,
+        createdAt: true,
+        _count: {
+          select: {
+            followers: true,
+            following: true,
+            Post: true,
+            Repost: true,
+          },
         },
       },
     });
