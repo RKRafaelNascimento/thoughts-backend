@@ -37,7 +37,7 @@ To set up and run this project, ensure you have the following installed:
 ## Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/RKRafaelNascimento/boilerplate_typescript.git
+git clone https://github.com/RKRafaelNascimento/thoughts-backend.git
 ```
 
 ## Step 2: Configure Environment Variables
@@ -65,7 +65,19 @@ Run the following command to install all required dependencies:
 npm install
 ```
 
-## Step 4: Run Database Migrations
+### Step 4: Run Docker Compose
+
+Bringing up the PostgreSQL database for the application to run, follow these steps to set up the database:
+
+```bash
+docker-compose up
+```
+
+Application will run on the port specified in your .env.development file (default: 3000).
+
+---
+
+## Step 5: Run Database Migrations
 
 Run the migration script to apply the latest database schema changes:
 
@@ -73,7 +85,7 @@ Run the migration script to apply the latest database schema changes:
 npm run migrate:dev
 ```
 
-## Step 5: Seed the Database
+## Step 6: Seed the Database
 
 Run the seed script to populate the database with initial data:
 
@@ -90,22 +102,6 @@ To run the application locally, use the development start command:
 ```bash
 npm run start:dev
 ```
-
-### Option 2: Run with Docker Compose
-
-If you choose to run the application using Docker, follow these steps to set up the database:
-
-```bash
-cp .env.example .env
-```
-
-```bash
-docker-compose up
-```
-
-Application will run on the port specified in your .env.development file (default: 3000).
-
----
 
 ### Additional Commands
 
