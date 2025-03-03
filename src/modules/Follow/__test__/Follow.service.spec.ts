@@ -26,6 +26,8 @@ beforeAll(() => {
 
   userServiceMock = {
     getById: jest.fn(),
+    countLimitedPostsAndRepostsTodayByUser: jest.fn(),
+    getUserProfile: jest.fn(),
   };
 
   followService = new FollowService(followRepositoryMock, userServiceMock);
