@@ -1,4 +1,4 @@
-import { startOfDay, endOfDay } from "date-fns";
+import { startOfDay, endOfDay, format } from "date-fns";
 
 export class DateHelper {
   static getStartOfDay(date: Date): Date {
@@ -7,5 +7,9 @@ export class DateHelper {
 
   static getEndOfDay(date: Date): Date {
     return endOfDay(date);
+  }
+
+  static format(date: Date): string {
+    return format(date, "dd/MM/yyyy");
   }
 }
