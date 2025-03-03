@@ -154,3 +154,71 @@ http://localhost:<PORT>/api-docs
 Replace <PORT> with the value defined in your .env.development file (default: 3000).
 
 ---
+
+### Crítica
+
+Crítica e Escalabilidade
+
+1️⃣ Partes do Sistema que Falhariam Primeiro
+Se o projeto crescesse rapidamente, algumas partes do sistema se tornariam gargalos e poderiam falhar. As principais áreas críticas seriam:
+
+🔹 Banco de Dados (PostgreSQL)
+
+À medida que o número de usuários e postagens aumenta, as consultas ao banco se tornam mais pesadas.
+O feed de postagens (GET /posts/feed) pode sofrer lentidão, pois exige buscas e ordenação em tempo real.
+
+🔹 Criação de Postagens e Repostagens
+
+Inserções simultâneas de postagens podem gerar concorrência alta, impactando a performance.
+O uso de AUTO_INCREMENT pode gerar conflitos se houver múltiplas instâncias do banco de dados.
+
+🔹 API Externa de Análise de Sentimento
+
+Se muitos usuários postarem ao mesmo tempo, a API pode atingir seu limite de requisições ou aumentar a latência.
+O sistema pode ficar dependente da API, tornando-se um ponto único de falha.
+
+2️⃣ Estratégias para Escalar o Sistema / Melhorias
+
+📌 1. Melhorar o Banco de Dados
+✅ Indexação
+Criar índices específicos para consultas de feed e busca de postagens para reduzir a complexidade de busca de O(n) ~~ O(n²) para O(log N).
+📌 Trade-off: Em tabelas que recebem muitas atualizações e inserções, a indexação pode gerar latência adicional, pois precisa ser atualizada constantemente.
+
+```
+CREATE INDEX idx_posts_user_created ON posts (user_id, created_at DESC);
+```
+
+✅ Replicação e Read-Replicas
+
+Distribuir a carga entre bancos de leitura para melhorar a performance.
+Leituras pesadas (GET /posts/feed) podem ser direcionadas para réplicas, reduzindo a carga do banco principal.
+
+✅ Uso de Cache (Redis)
+
+Consultas frequentes, como o feed, podem ser armazenadas no Redis, reduzindo chamadas ao banco de dados.
+Buscar no Redis (O(1)) é muito mais rápido do que consultar o banco (O(log N)).
+
+📌 2. Melhorar a Criação de Postagens e Repostagens
+
+🔹 Fila Assíncrona para Criação de Postagens
+
+Publicar posts e reposts em uma fila (RabbitMQ, Kafka, SQS) para processamento em background.
+Reduz a latência da API, pois o usuário não precisa esperar a análise de sentimento antes de receber uma resposta.
+
+Evita falhas causadas pela API de análise de sentimento.
+
+Garante resiliência e tolerância a falhas, permitindo o reprocessamento em caso de erros.
+
+🔹 Uso de UUID no Lugar de AUTO_INCREMENT
+
+Permite escalabilidade horizontal sem risco de conflitos em múltiplos bancos.
+Evita locks e concorrência excessiva na inserção de novos registros.
+
+3️⃣ Tecnologias e Infraestrutura para Suporte à Escalabilidade
+
+🔹 Fila de Mensagens (RabbitMQ, Kafka, SQS) → Processamento assíncrono de postagens e análise de sentimento.
+🔹 Redis → Cache para otimizar a busca do feed e reduzir consultas ao banco.
+🔹 PostgreSQL (Read Replicas) → Distribuir a carga de leitura e escrita.
+🔹 Load Balancer ( AWS ALB) → Distribuir requisições entre múltiplos servidores de API.
+🔹 Auto Scaling → Escalar automaticamente as instâncias da aplicação conforme a demanda, garantindo alta disponibilidade e eficiência de custos.
+🔹 AWS ECS ou EKS → Gerenciar containers de forma escalável e eficiente.
