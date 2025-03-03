@@ -1,4 +1,8 @@
 import { applicationConfig } from "@/config";
+import { followSwagger } from "@/modules/Follow/swagger/Follow.swagger";
+import { postSwagger } from "@/modules/Post/swagger/Post.swagger";
+import { repostSwagger } from "@/modules/Repost/swagger/Repost.swagger";
+import { userSwagger } from "@/modules/User/swagger/User.swagger";
 
 export const swaggerConfig = {
   openapi: "3.0.0",
@@ -22,6 +26,16 @@ export const swaggerConfig = {
       },
     },
   },
-  tags: [],
-  paths: {},
+  tags: [
+    ...followSwagger.tags,
+    ...postSwagger.tags,
+    ...repostSwagger.tags,
+    ...userSwagger.tags,
+  ],
+  paths: {
+    ...followSwagger.paths,
+    ...postSwagger.paths,
+    ...repostSwagger.paths,
+    ...userSwagger.paths,
+  },
 };
