@@ -6,19 +6,21 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
   id        Int      @id @default(autoincrement())
-  username  String   @unique //@db.VarChar(14)
+  username  String   @db.VarChar(14)
   createdAt DateTime @default(now())
 
   followers Follow[] @relation("followers")
   following Follow[] @relation("following")
   Post      Post[]
   Repost    Repost[]
+
+  @@unique([username])
 }
 
 model Follow {
@@ -38,7 +40,7 @@ model Post {
   id        Int       @id @default(autoincrement())
   userId    Int
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  content   String //@db.VarChar(200)
+  content   String    @db.VarChar(200)
   sentiment Sentiment
   createdAt DateTime  @default(now())
   Repost    Repost[]
@@ -50,7 +52,7 @@ model Repost {
   user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   originalPostId Int
   originalPost   Post       @relation(fields: [originalPostId], references: [id], onDelete: Cascade)
-  content        String? //@db.VarChar(200) 
+  content        String?    @db.VarChar(200)
   sentiment      Sentiment?
   createdAt      DateTime   @default(now())
 

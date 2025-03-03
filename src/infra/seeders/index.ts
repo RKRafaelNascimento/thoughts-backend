@@ -39,14 +39,9 @@ async function main() {
   try {
     await prisma.$transaction(async (transaction) => {
       await transaction.follow.deleteMany({});
-      await transaction.post.deleteMany({});
       await transaction.repost.deleteMany({});
+      await transaction.post.deleteMany({});
       await transaction.user.deleteMany({});
-
-      await transaction.$executeRaw`DELETE FROM sqlite_sequence WHERE name = 'User';`;
-      await transaction.$executeRaw`DELETE FROM sqlite_sequence WHERE name = 'Follow';`;
-      await transaction.$executeRaw`DELETE FROM sqlite_sequence WHERE name = 'Post';`;
-      await transaction.$executeRaw`DELETE FROM sqlite_sequence WHERE name = 'Repost';`;
 
       await transaction.user.createMany({
         data: [
@@ -59,7 +54,6 @@ async function main() {
       });
 
       const users = await transaction.user.findMany();
-
       const user1 = users[0];
       const user2 = users[1];
       const user3 = users[2];
@@ -67,29 +61,18 @@ async function main() {
 
       await transaction.follow.createMany({
         data: [
-          /**
-           *  User 1 Follow all users
-           **/
           ...users
             .filter((u) => u.id !== user1.id)
             .map((u) => ({
               followerId: user1.id,
               followedId: u.id,
             })),
-
-          /**
-           * User 2 all users
-           **/
           ...users
             .filter((u) => u.id !== user2.id)
             .map((u) => ({
               followerId: user2.id,
               followedId: u.id,
             })),
-
-          /**
-           * User 3 follow only user 1
-           **/
           { followerId: user3.id, followedId: user1.id },
         ],
       });
