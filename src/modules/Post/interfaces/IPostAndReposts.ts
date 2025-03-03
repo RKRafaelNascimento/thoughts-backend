@@ -20,4 +20,4 @@ export interface IPost {
   Repost: IRepost[];
 }
 
-export type IPostAndReposts = IPost;
+export type IPostAndReposts = IPost[];
