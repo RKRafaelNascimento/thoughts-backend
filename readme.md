@@ -160,12 +160,13 @@ Replace <PORT> with the value defined in your .env.development file (default: 30
 Crítica e Escalabilidade
 
 1️⃣ Partes do Sistema que Falhariam Primeiro
+
 Se o projeto crescesse rapidamente, algumas partes do sistema se tornariam gargalos e poderiam falhar. As principais áreas críticas seriam:
 
 🔹 Banco de Dados (PostgreSQL)
 
-À medida que o número de usuários e postagens aumenta, as consultas ao banco se tornam mais pesadas.
-O feed de postagens (GET /posts/feed) pode sofrer lentidão, pois exige buscas e ordenação em tempo real.
+- À medida que o número de usuários e postagens aumenta, as consultas ao banco se tornam mais pesadas.
+- O feed de postagens (GET /posts/feed) pode sofrer lentidão, pois exige buscas e ordenação em tempo real.
 
 🔹 Criação de Postagens e Repostagens
 
