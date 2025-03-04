@@ -155,6 +155,50 @@ Replace <PORT> with the value defined in your .env.development file (default: 30
 
 ---
 
+## Follow
+
+**Endpoint:** POST /follow/{followedId}  
+**Descrição:** Permite que um usuário autenticado siga outro usuário. O request deve incluir o 'user_id' no cabeçalho.
+**Objetivo:** Adicionar um usuário à lista de seguidos do usuário autenticado.
+
+**Endpoint:** DELETE /follow/{followedId}  
+**Descrição:** Permite que um usuário autenticado pare de seguir outro usuário. O request deve incluir o 'user_id' no cabeçalho.
+**Objetivo:** Remover um usuário da lista de seguidos do usuário autenticado.
+
+---
+
+## Post
+
+**Endpoint:** POST /post  
+**Descrição:** Permite que um usuário autenticado crie uma nova postagem. O request deve incluir o 'user_id' no cabeçalho.  
+**Objetivo:** Criar uma nova postagem no sistema.
+
+**Endpoint:** GET /post/feed  
+**Descrição:** Recupera o feed de postagens do usuário autenticado. O request deve incluir o 'user_id' no cabeçalho. Caso o parâmetro `filter=following` seja passado, apenas postagens de usuários seguidos serão retornadas.  
+**Objetivo:** Obter as postagens recentes no feed do usuário.
+
+**Endpoint:** GET /post/{userId}  
+**Descrição:** Recupera todas as postagens de um usuário específico.  
+**Objetivo:** Listar todas as postagens feitas por um usuário específico.
+
+---
+
+## Repost
+
+**Endpoint:** POST /repost/{originalPostId}  
+**Descrição:** Permite que um usuário autenticado repost um post de outro usuário. O request deve incluir o 'user_id' no cabeçalho.  
+**Objetivo:** Criar um repost de uma postagem existente.
+
+---
+
+## User
+
+**Endpoint:** GET /user  
+**Descrição:** Recupera os detalhes do perfil do usuário autenticado. O request deve incluir o 'user_id' no cabeçalho.  
+**Objetivo:** Obter informações do perfil do usuário logado.
+
+---
+
 ### Crítica
 
 Crítica e Escalabilidade
